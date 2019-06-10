@@ -1,0 +1,46 @@
+class Main {
+
+  public static void main(String[] args) {
+    double days[] = { 70, 62, 89, 54, 97, 75, 82, 56, 32, 78 };         //The temperature of given days
+    double sunnyMean = 80.0;                                            //Mean temperature for sunny days
+    double cloudyMean = 55.0;                                           //Mean temperature for cloudy days
+    double deviation = 10;
+    double sunnyInstance[] = new double[days.length];
+    double cloudyInstance[] = new double[days.length];
+    double sunnyNumerator = 0.0;
+    double cloudyNumerator = 0.0;
+    double alpha;
+    double beta = -1 / (2 * Math.pow(deviation, 2));
+    double gamma;
+    double cloudyAccum = 0;
+    double sunnyAccum = 0;
+    for (int z = 0; z < 3; z++) {
+
+      for (int i = 0; i < days.length; i++) {
+        alpha = Math.pow((days[i] - sunnyMean), 2);
+        gamma = Math.pow((days[i] - cloudyMean), 2);
+        sunnyNumerator = Math.pow(Math.E, (alpha * beta));
+        cloudyNumerator = Math.pow(Math.E, (gamma * beta));
+        sunnyInstance[i] = sunnyNumerator / (sunnyNumerator + cloudyNumerator);
+        cloudyInstance[i] = cloudyNumerator / (cloudyNumerator + sunnyNumerator);
+      }
+
+      sunnyMean = 0;
+      cloudyMean = 0;
+
+      for (int k = 0; k < days.length; k++) {
+        sunnyMean += days[k] * sunnyInstance[k];
+        cloudyMean += days[k] * cloudyInstance[k];
+        sunnyAccum += sunnyInstance[k];
+        cloudyAccum += cloudyInstance[k];
+      }
+
+      sunnyMean = sunnyMean / sunnyAccum;
+      cloudyMean = cloudyMean / cloudyAccum;
+      sunnyAccum = 0;
+      cloudyAccum = 0;
+      System.out.println("New Sunny mean is: " + sunnyMean);
+      System.out.println("New Cloudy mean is: " + cloudyMean);
+    }
+  }
+}
